@@ -53,7 +53,45 @@ class Bank:
             
             Bank.dummyData.append(userInfo)
             Bank.__update()
+        
+    def depositMoney(self):
+        accountNumber = input("Enter your bank account number: ")
+        pin = int(input("Enter your pin number: "))
+        
+        targetUser = [i for i in Bank.dummyData if i['accountNumber'] == accountNumber and i['pin'] == pin]
+        
+        if targetUser == []:
+            print("Sorry you don't have a account in our bank")
             
+        else:
+            amount = int(input("Enter the amount you want to deposit in your account: "))
+            if amount > 10000 or amount < 0:
+                print("Enter amount must be between 10000 and 0, Please retry again")
+            
+            else:
+                targetUser[0]['balance'] += amount
+                Bank.__update()
+                print("Amount has been Deposited Successfully")
+                
+    def withdrawMoney(self):
+        accountNumber = input("Enter your bank account number: ")
+        pin = int(input("Enter your pin number: "))
+        
+        targetUser = [i for i in Bank.dummyData if i['accountNumber'] == accountNumber and i['pin'] == pin]
+        
+        if targetUser == []:
+            print("Sorry you don't have a account in our bank")
+            
+        else:
+            amount = int(input("Enter the amount you want to withdraw from your account: "))
+            if amount > targetUser[0]['balance']:
+                print("Enter amount must be less than or equal to your current balance, Please retry again")
+            
+            else:
+                targetUser[0]['balance'] -= amount
+                Bank.__update()
+                print("Amount has been withdrawn Successfully")
+        
 
 user = Bank()
 
@@ -70,3 +108,8 @@ match check:
     case 1:
         user.createAccount()
     
+    case 2:
+        user.depositMoney()
+        
+    case 3:
+        user.withdrawMoney()
